@@ -7,7 +7,14 @@ export class App extends React.Component {
     bad: 0,
   };
 
+  countTotalFeedback = () => {};
+
+  countPositiveFeedbackPercentage = () => {};
+
   render() {
+    const { good, neutral, bad } = this.state;
+    const total = good + neutral + bad;
+    const positive = (good * 100) / total;
     return (
       <>
         <h2>Please leave feedback</h2>
@@ -16,11 +23,11 @@ export class App extends React.Component {
         <button>Bad</button>
         <h2>Statistics</h2>
         <ul>
-          <li>Good:{}</li>
-          <li>Neutral:{}</li>
-          <li>Bad:{}</li>
-          <li>Total:{}</li>
-          <li>Positive feedback:{}</li>
+          <li>Good:{good}</li>
+          <li>Neutral:{neutral}</li>
+          <li>Bad:{bad}</li>
+          <li>Total:{total}</li>
+          {(positive || !isNaN) && <li>Positive feedback:{positive}%</li>}
         </ul>
       </>
     );
