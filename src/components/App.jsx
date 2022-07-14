@@ -1,4 +1,5 @@
 import React from 'react';
+import Statistics from './Statistics';
 
 export class App extends React.Component {
   state = {
@@ -7,28 +8,55 @@ export class App extends React.Component {
     bad: 0,
   };
 
-  countTotalFeedback = () => {};
+  onGoodBtnClick = () => {
+    this.setState(prevState => ({ good: prevState.good + 1 }));
+  };
 
-  countPositiveFeedbackPercentage = () => {};
+  onNeutralBtnClick = () => {
+    this.setState(prevState => ({ neutral: prevState.neutral + 1 }));
+  };
+
+  onBadBtnClick = () => {
+    this.setState(prevState => ({ bad: prevState.bad + 1 }));
+  };
+
+  countTotalFeedback = (good, neutral, bad) => {
+    return good + neutral + bad;
+  };
+
+  countPositiveFeedbackPercentage = (good, neutral, bad) => {
+    if (good + neutral + bad === 0) {
+      return 0;
+    } else {
+      return Math.round((good * 100) / (good + neutral + bad));
+    }
+  };
 
   render() {
     const { good, neutral, bad } = this.state;
-    const total = good + neutral + bad;
-    const positive = (good * 100) / total;
     return (
       <>
         <h2>Please leave feedback</h2>
-        <button>Good</button>
-        <button>Neutral</button>
-        <button>Bad</button>
-        <h2>Statistics</h2>
-        <ul>
-          <li>Good:{good}</li>
-          <li>Neutral:{neutral}</li>
-          <li>Bad:{bad}</li>
-          <li>Total:{total}</li>
-          {(positive || !isNaN) && <li>Positive feedback:{positive}%</li>}
-        </ul>
+        <button type="button" onClick={this.onGoodBtnClick}>
+          Good
+        </button>
+        <button type="button" onClick={this.onNeutralBtnClick}>
+          Neutral
+        </button>
+        <button type="button" onClick={this.onBadBtnClick}>
+          Bad
+        </button>
+        <Statistics
+          good={good}
+          neutral={neutral}
+          bad={bad}
+          total={this.countTotalFeedback(good, neutral, bad)}
+          positivePercentage={this.countPositiveFeedbackPercentage(
+            good,
+            neutral,
+            bad
+          )}
+        ></Statistics>
       </>
     );
   }
